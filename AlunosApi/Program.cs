@@ -31,6 +31,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
 
+app.UseCors(opt => opt.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
 app.UseHttpsRedirection();
 
 app.UseRouting();
