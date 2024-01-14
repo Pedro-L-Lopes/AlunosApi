@@ -1,4 +1,5 @@
 using AlunosApi.Context;
+using AlunosApi.Middlewares;
 using AlunosApi.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,8 @@ string sqlSeverConnection = builder.Configuration.GetConnectionString("DefaultCo
 builder.Services.AddDbContext<AppDbContext>
                               (options => options.UseSqlServer(sqlSeverConnection));
 
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +29,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
+
 app.UseHttpsRedirection();
+
+app.UseRouting();
+app.MapControllers();
 
 app.Run();

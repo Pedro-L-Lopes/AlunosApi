@@ -21,7 +21,7 @@ namespace AlunosApi.Services
         public async Task<IEnumerable<Aluno>> GetAlunosByNome(string nome)
         {
             IEnumerable<Aluno> alunos;
-            if (string.IsNullOrEmpty(nome))
+            if (!string.IsNullOrEmpty(nome))
             {
                 alunos = await _context.Alunos.Where(n => n.Nome.Contains(nome)).ToListAsync();
             }
