@@ -1,6 +1,7 @@
 using AlunosApi.Context;
 using AlunosApi.Middlewares;
 using AlunosApi.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,11 @@ builder.Services.AddScoped<IAlunoService, AlunosService>();
 string sqlSeverConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>
                               (options => options.UseSqlServer(sqlSeverConnection));
+
+// Identity || IdentityUser: propriedades do user que vai se autenticar   ||  IdentityRole: Perfis do usuário  
+builder.Services.AddIdentity<IdentityUser, IdentityRole>() // Adiciona config padrão ao IdentityUser e Role
+    .AddEntityFrameworkStores<AppDbContext>() // Armazenar e recéprar infos dos usuários/perfis registrados
+    .AddDefaultTokenProviders(); // Gera token nas operações de conta do user como redefinição de senha/alteração do email
 
 builder.Services.AddControllers();
 
