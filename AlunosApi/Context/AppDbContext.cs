@@ -16,24 +16,24 @@ namespace AlunosApi.Context
         // Mapeando tabelas no banco de dados
         public DbSet<Aluno> Alunos { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Aluno>().HasData(
-                new Aluno
-                {
-                    Id = 1,
-                    Nome = "Zezin do grau",
-                    Email = "zezin@email.com",
-                    Idade = 20
-                },
-                 new Aluno
-                 {
-                Id = 2,
-                    Nome = "Wilson",
-                    Email = "Wilson@email.com",
-                    Idade = 35
-                }
-            );
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Aluno>().HasData(
+        //        new Aluno
+        //        {
+        //            Id = 1,
+        //            Nome = "Zezin do grau",
+        //            Email = "zezin@email.com",
+        //            Idade = 20
+        //        },
+        //         new Aluno
+        //         {
+        //        Id = 2,
+        //            Nome = "Wilson",
+        //            Email = "Wilson@email.com",
+        //            Idade = 35
+        //        }
+        //    );
+        //}
     }
 }

@@ -1,8 +1,11 @@
 using AlunosApi.Context;
 using AlunosApi.Middlewares;
 using AlunosApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Registrando serviços
+builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
 builder.Services.AddScoped<IAlunoService, AlunosService>();
 
 // Banco de dados
@@ -24,6 +28,22 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>() // Adiciona config pa
     .AddEntityFrameworkStores<AppDbContext>() // Armazenar e recéprar infos dos usuários/perfis registrados
     .AddDefaultTokenProviders(); // Gera token nas operações de conta do user como redefinição de senha/alteração do email
 
+// JWT
+builder.Services.AddAuthentication(
+        JwtBearerDefaults.AuthenticationScheme).
+        AddJwtBearer(options =>
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"]))
+        });
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -35,13 +55,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Habilitando middleware de erros
 app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
 
+// Habilitando cors
 app.UseCors(opt => opt.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
