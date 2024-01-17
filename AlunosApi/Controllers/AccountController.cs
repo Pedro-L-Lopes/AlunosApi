@@ -37,7 +37,8 @@ namespace AlunosApi.Controllers
 
             if (result)
             {
-                return Ok($"Usuário {model.Email} criado com sucesso");
+                var userInfo = new LoginModel { Email = model.Email, Password = model.Password };
+                return GenerateToken(userInfo);
             }
             else
             {
