@@ -8,6 +8,7 @@ using System.Text;
 
 namespace AlunosApi.Controllers
 {
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [Route("api/[controller]")] 
     [ApiController]
     public class AccountController : ControllerBase
@@ -24,6 +25,21 @@ namespace AlunosApi.Controllers
                 throw new ArgumentNullException(nameof(authentication));
         }
 
+        /// <summary>
+        /// Cria um novo usuário.
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de requisição:
+        /// 
+        ///     POST api/Account/CreateUser
+        ///     {
+        ///         "email": "usuario@user.com",
+        ///         "password": "User12#",
+        ///         "confirmPassword": "User12#"
+        ///     }
+        /// </remarks>
+        /// <param name="model">Objeto contendo email, senha e confirmação de senha.</param>
+        /// <returns>ActionResult contendo Token de autenticação e validade do token.</returns>
         [HttpPost("CreateUser")]
         public async Task<ActionResult<UserToken>> CreateUser([FromBody] RegisterModel model)
         {
@@ -47,6 +63,20 @@ namespace AlunosApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Realiza o login do usuário.
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de requisição:
+        /// 
+        ///     POST api/Account/LoginUser
+        ///     {
+        ///         "email": "usuario@user.com",
+        ///         "password": "User12#"
+        ///     }
+        /// </remarks>
+        /// <param name="userInfo">Objeto contendo email e senha.</param>
+        /// <returns>ActionResult contendo Token de autenticação e validade do token.</returns>
         [HttpPost("LoginUser")]
         public async Task<ActionResult<UserToken>> Login([FromBody] LoginModel userInfo)
         {
