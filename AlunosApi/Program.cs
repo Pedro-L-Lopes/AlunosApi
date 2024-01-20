@@ -21,9 +21,10 @@ builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
 builder.Services.AddScoped<IAlunoService, AlunosService>();
 
 // Banco de dados
-string sqlSeverConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>
-                              (options => options.UseSqlServer(sqlSeverConnection));
+var mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+                    options.UseMySql(mySqlConnection,
+                    ServerVersion.AutoDetect(mySqlConnection)));
 
 // Identity || IdentityUser: propriedades do user que vai se autenticar   ||  IdentityRole: Perfis do usuário  
 builder.Services.AddIdentity<IdentityUser, IdentityRole>() // Adiciona config padrão ao IdentityUser e Role
