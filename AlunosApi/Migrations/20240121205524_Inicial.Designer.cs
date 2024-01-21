@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlunosApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240120224505_Inicial")]
+    [Migration("20240121205524_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
